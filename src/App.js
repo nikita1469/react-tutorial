@@ -10,13 +10,27 @@ class App extends Component {
       {name: 'Audi', year: 2016},
       {name: 'Mazda', year: 2010}
     ],
-    pageTitle: 'React components'
+    pageTitle: 'React components',
+    showCars: false
   }
 
-  changeTitleHandler = (newTitle) => {
+  toggleCarsHandler = () => {
     this.setState({
-      pageTitle: newTitle
+      showCars: !this.state.showCars
     })
+  }
+
+  // changeTitleHandler = (pageTitle) => {
+  //   this.setState({pageTitle})
+  // }
+
+  onChangeName(name, index) {
+    const car = this.state.cars[index]
+    car.name = name
+    const cars = [...this.state.cars]
+    cars[index] = car
+
+    this.setState({cars})
   }
 
   handleInput = (event) => {
@@ -26,33 +40,45 @@ class App extends Component {
     })
   }
 
+  deleteHandler(index) {
+    let cars = this.state.cars.concat()
+    cars.splice(index, 1)
+    this.setState({cars})
+
+  }
+
   render() {
     console.log('Render')
     const divStyle = {
       textAlign: 'center'
     }
 
+    
+
     const cars = this.state.cars
 
     return (
       <div style={divStyle}>
         <h1>{this.state.pageTitle}</h1>
-        <input type="text" onChange={this.handleInput}/>
 
         <button
-          onClick={this.changeTitleHandler.bind(this, 'Changed!')}
-        >Change title</button>
+          onClick={this.toggleCarsHandler}
+        >Toggle cars</button>
 
-        { this.state.cars.map((car, index) => {
-          return (
-            <Car
-              key={index}
-              name={car.name}
-              year={car.year}
-              onChangeTitle={ () => this.changeTitleHandler(car.name)}
-            />
-          )
-        }) }
+        {this.state.showCars        
+          ? this.state.cars.map((car, index) => {
+            return (
+              <Car
+                key={index}
+                name={car.name}
+                year={car.year}
+                onChangeName={ event => this.onChangeName(event.target.value, index)}
+                onDelete={this.deleteHandler.bind(this, index)}
+              />
+            )
+          }) 
+          : null
+        }
 
         {/* <Car name={cars[0].name} year={cars[0].year} />
         <Car name={cars[1].name} year={cars[1].year} />
