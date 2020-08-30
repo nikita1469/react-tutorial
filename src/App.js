@@ -1,18 +1,35 @@
 import React, { Component } from 'react';
 import './App.css';
 import Car from './Car/Car'
+import Counter from './Counter/Counter'
 
 class App extends Component {
 
-  state = {
-    cars: [
-      {name: 'Ford', year: 2018},
-      {name: 'Audi', year: 2016},
-      {name: 'Mazda', year: 2010}
-    ],
-    pageTitle: 'React components',
-    showCars: false
+  constructor(props) {
+    console.log('App constructor')
+    super(props)
+
+    this.state = {
+      cars: [
+        {name: 'Ford', year: 2018},
+        {name: 'Audi', year: 2016},
+        {name: 'Mazda', year: 2010}
+      ],
+      pageTitle: 'React components',
+      showCars: false
+    }
   }
+
+
+  // state = {
+  //   cars: [
+  //     {name: 'Ford', year: 2018},
+  //     {name: 'Audi', year: 2016},
+  //     {name: 'Mazda', year: 2010}
+  //   ],
+  //   pageTitle: 'React components',
+  //   showCars: false
+  // }
 
   toggleCarsHandler = () => {
     this.setState({
@@ -47,8 +64,17 @@ class App extends Component {
 
   }
 
+  componentWillMount() {
+    console.log('App componentWillMount')
+  }
+
+  componentDidMount() {
+    console.log('App componentDidMount')
+  }
+
   render() {
-    console.log('Render')
+    console.log('App render')
+
     const divStyle = {
       textAlign: 'center'
     }
@@ -59,27 +85,37 @@ class App extends Component {
 
     return (
       <div style={divStyle}>
-        <h1>{this.state.pageTitle}</h1>
+        {/* <h1>{this.state.pageTitle}</h1> */}
+        <h1>{this.props.title}</h1>
 
+        <Counter/>
+
+        <hr/>
+        
         <button
+          style={{marginTop: '2px'}}
           onClick={this.toggleCarsHandler}
         >Toggle cars</button>
 
-        {this.state.showCars        
-          ? this.state.cars.map((car, index) => {
-            return (
-              <Car
-                key={index}
-                name={car.name}
-                year={car.year}
-                onChangeName={ event => this.onChangeName(event.target.value, index)}
-                onDelete={this.deleteHandler.bind(this, index)}
-              />
-            )
-          }) 
-          : null
-        }
-
+        <div style={{
+          width: '400px',
+          margin: 'auto',
+          paddingTop: '20px'
+        }}>
+          {this.state.showCars        
+            ? this.state.cars.map((car, index) => {
+              return (
+                  <Car
+                    name={car.name}
+                    year={car.year}
+                    onChangeName={ event => this.onChangeName(event.target.value, index)}
+                    onDelete={this.deleteHandler.bind(this, index)}
+                  />
+              )
+            }) 
+            : null
+          }
+        </div>
         {/* <Car name={cars[0].name} year={cars[0].year} />
         <Car name={cars[1].name} year={cars[1].year} />
         <Car name={cars[2].name} year={cars[2].year} /> */}
